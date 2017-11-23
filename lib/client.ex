@@ -19,10 +19,12 @@ defmodule Client do
         #Subcribe to users
         GenServer.cast(server,{:subscribe,x,subscribe_to})
         #Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
-        
+        {:noreply,{x}}
     end
     def handle_cast(:deactivate})do
         #stop all activities, play dead
+        #inform server
+        {:noreply,{x}}
     end
 
     def tweet() do
