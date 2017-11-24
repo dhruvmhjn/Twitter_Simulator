@@ -16,7 +16,7 @@ defmodule Boss do
         boss_receiver(numClientsInt,timePeriodInt)
     end
             
-    def boss_receiver(numNodes,numRequests) do
+    def boss_receiver(numClients,timePeriod) do
         receive do
             
             {:nodes_created} ->
@@ -39,6 +39,6 @@ defmodule Boss do
                 IO.puts "Average Hops: #{avg}"
                 :init.stop                
         end
-        boss_receiver(numNodes,numRequests)
+        boss_receiver(numClients,timePeriod)
     end
 end
