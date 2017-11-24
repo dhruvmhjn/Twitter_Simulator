@@ -4,16 +4,16 @@ defmodule Boss do
     end
     defp parse_args(args) do
         cmdarg = OptionParser.parse(args)
-        {[],[numNodes,numRequests],[]} = cmdarg
-        numNodesInt = String.to_integer(numNodes)
-        numRequestsInt = String.to_integer(numRequests)
+        {[],[numClients,timePeriod]],[]} = cmdarg
+        numClientsInt = String.to_integer(numClients)
+        timePeriodInt = String.to_integer(timePeriod)
 
         #Register yourself
         Process.register(self(),:boss)
         
-        ApplicationSupervisor.start_link([numNodesInt,numRequestsInt])
+        ApplicationSupervisor.start_link([numClientsInt,timePeriodInt])
         
-        boss_receiver(numNodesInt,numRequestsInt)
+        boss_receiver(numClientsInt,timePeriodInt)
     end
             
     def boss_receiver(numNodes,numRequests) do
