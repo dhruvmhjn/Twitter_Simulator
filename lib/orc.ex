@@ -13,7 +13,8 @@ defmodule Orc do
     def handle_cast({:spawn_complete},{numClients,timePeriod,numRegistered}) do
     
         n_list = Enum.to_list 1..numClients
-        nodeid_list = Enum.map(n_list, fn(x) -> "user"<>x end)
+
+        nodeid_list = Enum.map(n_list, fn(x) -> "user"<>Integer.to_string(x) end)
         Enum.map(nodeid_list, fn(x) -> GenServer.cast(String.to_atom(x),{:register}) end)
     
     end
