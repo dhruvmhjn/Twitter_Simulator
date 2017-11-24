@@ -10,6 +10,7 @@ defmodule Server do
      end
      def handle_call({:registeruser,x},_,{n}) do
         #update table (add a new user x)
+        
         {:reply,"ok",{n}}
      end
      def handle_cast({:subscribe,x,subscribe_to},{n})do
