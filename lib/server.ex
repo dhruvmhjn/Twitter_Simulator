@@ -1,6 +1,6 @@
 defmodule Server do
     use GenServer
-    def start_link({n}) do
+    def start_link(n,_) do
         GenServer.start_link(__MODULE__, {n}, name: String.to_atom("server"))    
     end
     def init({n}) do        
@@ -10,7 +10,7 @@ defmodule Server do
      end
      def handle_call({:registeruser,x},_,{n}) do
         #update table (add a new user x)
-        
+        IO.puts("Registering user #{x}")
         {:reply,"ok",{n}}
      end
      def handle_cast({:subscribe,x,subscribe_to},{n})do

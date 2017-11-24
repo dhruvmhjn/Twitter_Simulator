@@ -1,6 +1,6 @@
 defmodule Client do
     use GenServer
-    def start_link({x}) do
+    def start_link(x,_) do
         input_srt = Integer.to_string(x)
         GenServer.start_link(__MODULE__, {x}, name: String.to_atom("user#{x}"))    
     end
