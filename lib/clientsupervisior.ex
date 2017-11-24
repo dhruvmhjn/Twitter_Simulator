@@ -2,6 +2,7 @@ defmodule ClientSupervisor do
     use Supervisor
     def start_link(clients,time) do
         {:ok,pid}= Supervisor.start_link(__MODULE__,{clients,time},[])
+        GenServer.cast(:orc,{:spawn_complete})
         
         #send(Process.whereis(:boss),{:nodes_created})
         
