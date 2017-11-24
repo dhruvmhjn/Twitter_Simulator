@@ -1,7 +1,7 @@
 defmodule ClientSupervisor do
     use Supervisor
     def start_link(clients,time) do
-        {:ok,pid}= Supervisor.start_link(__MODULE__,{nodes,requests},[])
+        {:ok,pid}= Supervisor.start_link(__MODULE__,{clients,time},[])
         
         #send(Process.whereis(:boss),{:nodes_created})
         

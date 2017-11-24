@@ -22,7 +22,7 @@ defmodule Client do
         #Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
         {:noreply,{x}}
     end
-    def handle_cast(:deactivate},{x})do
+    def handle_cast({:deactivate},{x})do
         #stop all activities, play dead
         #inform server
         {:noreply,{x}}
