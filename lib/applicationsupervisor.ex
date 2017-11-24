@@ -9,7 +9,7 @@ defmodule ApplicationSupervisor do
     def start_workers(sup, [numClients,timePeriod]) do
     
             {:ok, serverid} = Supervisor.start_child(sup, worker(Server, [numClients,timePeriod]))
-            {:ok, orcid} = Supervisor.start_child(sup, worker(Orchestrator, [numClients,timePeriod]))     
+            {:ok, orcid} = Supervisor.start_child(sup, worker(Orc, [numClients,timePeriod]))     
             Supervisor.start_child(sup, supervisor(ClientSupervisor, [numClients,timePeriod]))    
     end
     
