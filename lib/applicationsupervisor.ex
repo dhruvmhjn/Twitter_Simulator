@@ -6,11 +6,11 @@ defmodule ApplicationSupervisor do
         return
     end
     
-    def start_workers(sup, [numNodes,numRequests]) do
+    def start_workers(sup, [numClients,timePeriod]) do
     
-            {:ok, lispid} = Supervisor.start_child(sup, worker(Listner, [numNodes,numRequests]))     
-            Supervisor.start_child(sup, supervisor(PastrySupervisor, [numNodes,numRequests,lispid]))
-    
+            {:ok, serverid} = Supervisor.start_child(sup, worker(Server, [numClients,timePeriod]))
+            {:ok, orcid} = Supervisor.start_child(sup, worker(Orchestrator, [numClients,timePeriod]))     
+            Supervisor.start_child(sup, supervisor(ClientSupervisor, [numClients,timePeriod]))    
     end
     
     def init(_) do
