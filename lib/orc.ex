@@ -16,7 +16,15 @@ defmodule Orc do
 
         nodeid_list = Enum.map(n_list, fn(x) -> "user"<>Integer.to_string(x) end)
         Enum.map(nodeid_list, fn(x) -> GenServer.cast(String.to_atom(x),{:register}) end)
-    
+        {:noreply,{numClients,timePeriod,numRegistered}}
+    end
+
+    def handle_cast({:registered},{numClients,timePeriod,numRegistered})do
+        numRegistered = numRegistered+1
+        if numRegistered == numClients do
+            IO.puts "Finished registration"
+        end
+        {:noreply,{numClients,timePeriod,numRegistered}}
     end
 
 
