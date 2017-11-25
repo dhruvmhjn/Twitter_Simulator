@@ -12,9 +12,12 @@ defmodule Server do
      def handle_call({:registeruser,x},_,{n}) do
         #update table (add a new user x)
         IO.puts("Registering user #{x}")
-        :ets.insert_new(:tab_user, {x, [], [], "qwerty"})
-        res = :ets.lookup(:tab_user, x)
-        IO.inspect res
+
+        :ets.insert_new(:tab_user, {x, [], [], "alive"})
+        #res = :ets.lookup(:tab_user, "qwerty")
+        #IO.inspect res
+        [_,_,_,_,_,_,_,{:size, recsize},_,_,_,_,_] = :ets.info(:tab_user)
+        IO.inspect recsize
         {:reply,"ok",{n}}
      end
      def handle_cast({:subscribe,x,subscribe_to},{n})do
