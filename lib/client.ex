@@ -7,25 +7,30 @@ defmodule Client do
 
     def init({x}) do        
        # register self
-        {:ok, {x}}
+        {:ok, {x,0}}
     end
 
-    def handle_cast({:register},{x})do
+    def handle_cast({:register},{x,act_comp})do
         #Send register request to server
         GenServer.call(:server,{:registeruser,x})
         GenServer.cast(:orc, {:registered})
-        {:noreply,{x}}
+        {:noreply,{x,act_comp}}
     end
-    def handle_cast({:activate, subscribe_to},{x})do
+    def handle_cast({:activate, subscribe_to},{x,act_comp})do
         #Subcribe to users
         GenServer.cast(:server,{:subscribe,x,subscribe_to})
         #Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
-        {:noreply,{x}}
+        GenServer.cast(self,{:pick_random,0})
+        {:noreply,{x,act_comp}}
     end
-    def handle_cast({:deactivate},{x})do
+    def handle_cast({:pick_random},{x,act_comp}) do
+        
+        {:noreply,{x,act_comp}}
+    end
+    def handle_cast({:deactivate},{x,act_comp})do
         #stop all activities, play dead
         #inform server
-        {:noreply,{x}}
+        {:noreply,{x,act_comp}}
     end
 
     def tweet(x) do
