@@ -23,6 +23,7 @@ defmodule Orc do
         numRegistered = numRegistered+1
         if numRegistered == numClients do
             IO.puts "Finished registration"
+            GenServer.cast(:server,{:begin_activate})
         end
         {:noreply,{numClients,timePeriod,numRegistered}}
     end
