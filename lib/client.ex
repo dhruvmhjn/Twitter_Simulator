@@ -24,29 +24,16 @@ defmodule Client do
         #GenServer.cast(self,{:pick_random,1})
         {:noreply,{x,acts,servernode}}
     end
-    def handle_cast({:subscribe},{x,acts,servernode})do
-        follow = :rand.uniform(x)
-        if follow != x do
-            GenServer.cast({:server,servernode},{:subscribe,x,[follow]})
-        end
 
-        {:noreply,{x,acts,servernode}}
-    end
-    def handle_cast({:tweet},{x,acts,servernode})do
-        msg = "160 random characters"
-        GenServer.cast({:server,servernode},{:tweet,x,msg})
-        
-        {:noreply,{x,acts,servernode}}
-    end
     def handle_cast({:pick_random,current_state},{x,acts,servernode}) do
         if(current_state >=  acts) do
         
         else
             choice = rem(:rand.uniform()*100000,5)
              case choice do
-                 1 -> GenServer.cast(self, {:subscribe})
+                 1 -> subscribe(x,servernode)
 
-                 2 -> GenServer.cast(self, {:tweet})
+                 2 ->  tweet(x,servernode)
                      #act 2
 
                  3 ->"three"
@@ -79,8 +66,10 @@ defmodule Client do
     end
     def subscribe(x,servernode) do
         #Pick random user
-        subscribe_to = "user1"
-        GenServer.cast({:server,servernode},{:subscribe,x,subscribe_to})
+        follow = :rand.uniform(x)
+        if follow != x do
+            GenServer.cast({:server,servernode},{:subscribe,x,[follow]})
+        end
     end
     def query() do
         
