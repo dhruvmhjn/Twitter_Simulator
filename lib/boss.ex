@@ -9,9 +9,9 @@ defmodule Boss do
         timePeriodInt = String.to_integer(timePeriod)
         {:ok,[{ip,_,_}|tail]}=:inet.getif()
         [{ip2,_,_}|tail2]=tail
-        ipofsnode =to_string(:inet.ntoa(ip))
+        ipofsnode =to_string(:inet.ntoa(ip2))
         if role == "server" do
-            ipofsnode =to_string(:inet.ntoa(ip2))
+            #ipofsnode =to_string(:inet.ntoa(ip2))
             snode=String.to_atom("servernode@"<>ipofsnode)
             IO.puts snode
             Node.start snode
