@@ -11,12 +11,13 @@ defmodule Boss do
         [{ip2,_,_}|tail2]=tail
         ipofsnode =to_string(:inet.ntoa(ip))
         if role == "server" do
+            ipofsnode =to_string(:inet.ntoa(ip2))
             snode=String.to_atom("servernode@"<>ipofsnode)
             IO.puts snode
             Node.start snode
             Node.set_cookie :dmahajan
             :global.register_name(:server_boss, self())
-            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>ipofsnode)]) 
+            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>"192.168.0.10")]) 
         else
 
             snode=String.to_atom("clientnode@"<>ipofsnode)

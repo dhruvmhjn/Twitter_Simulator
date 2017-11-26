@@ -12,9 +12,9 @@ defmodule Client do
 
     def handle_cast({:register},{x,acts,servernode})do
         #Send register request to server
-        GenServer.call({:server,,servernode},{:registeruser,x})
+        GenServer.call({:server,servernode},{:registeruser,x})
         GenServer.cast(:orc, {:registered})
-        {:noreply,{x,acts,servernode}
+        {:noreply,{x,acts,servernode}}
     end
     def handle_cast({:activate, subscribe_to},{x,acts,servernode})do
         #Subcribe to users
@@ -53,12 +53,12 @@ defmodule Client do
         {:noreply,{x,acts,servernode}}
     end
 
-    def tweet(x) do
+    def tweet(x,servernode) do
         #Generate a message
         msg = "160 random characters"
         GenServer.cast({:server,servernode},{:tweet,x,msg})
     end
-    def subscribe(x) do
+    def subscribe(x,servernode) do
         #Pick random user
         subscribe_to = "user1"
         GenServer.cast({:server,servernode},{:subscribe,x,subscribe_to})
