@@ -29,7 +29,7 @@ defmodule Client do
         if(current_state >=  acts) do
         #
         else
-            choice = rem(:rand.uniform()*100000,5)
+            choice = rem(round(:rand.uniform()*100000),5)
              case choice do
                  1 -> subscribe(x,servernode)
 
