@@ -22,11 +22,15 @@ defmodule Server do
      end
      def handle_cast({:subscribe,x,subscribe_to},{n})do
         #update table (add subscribe to for user x)
+        [{_,old_list,_,_}] = :ets.lookup(:tab_user, x)
+        new_list = old_list++subscribe_to
+        :ets.update_element(:tab_user, x, {2, new_list})
+        IO.inspect :ets.lookup(:tab_user,x)
         {:noreply,{n}}
      end
      def handle_cast({:tweet,x,msg},{n})do
         #update table (add msg to tweet list of x)
-        #cast message to all subscribers of x
+        #cast message to all subscribers of x if ALIVE
         {:noreply,{n}}
      end
 end

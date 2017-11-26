@@ -21,10 +21,7 @@ defmodule Orc do
 
     def handle_cast({:begin_activate},{numClients,timePeriod,numRegistered})do
         n_list = Enum.to_list 1..numClients
-        #nodeid_list = Enum.map(n_list, fn(x) -> "user"<>Integer.to_string(x) end)
-
         sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,:rand.uniform(10)), fn(_)->:rand.uniform(numClients)end)end)
-        IO.inspect sub_list
         Enum.map(n_list, fn(x) -> GenServer.cast(String.to_atom("user"<>Integer.to_string(x)),{:activate, Enum.at(sub_list,x-1)}) end)
         {:noreply,{numClients,timePeriod,numRegistered}}
     end
