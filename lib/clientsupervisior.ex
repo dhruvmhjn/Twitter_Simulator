@@ -1,8 +1,8 @@
 defmodule ClientSupervisor do
     use Supervisor
-    def start_link(clients,time,servernode) do
+    def start_link([clients,time,servernode]) do
         return = {:ok,sup} = Supervisor.start_link(__MODULE__,{clients,time,servernode},[])
-        start_workers(sup,clients,timem,servernode)
+        start_workers(sup,clients,time,servernode)
         GenServer.cast(:orc,{:spawn_complete})
         return
     end

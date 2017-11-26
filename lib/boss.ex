@@ -16,7 +16,7 @@ defmodule Boss do
             Node.start snode
             Node.set_cookie :dmahajan
             :global.register_name(:server_boss, self())
-            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>ipofsnode]) 
+            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>ipofsnode)]) 
         else
 
             snode=String.to_atom("clientnode@"<>ipofsnode)

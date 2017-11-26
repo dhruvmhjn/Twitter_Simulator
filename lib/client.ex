@@ -29,20 +29,20 @@ defmodule Client do
         
         else
             choice = rem(:rand.uniform()*100000,5)
-            case choice do
-                1 ->
-                    #act 1
-                2 ->
-                    #act 2
-                3 ->
-                    #act 3
-                4 ->
-                    #act 4
-                5 ->
-                    #act 5
-                _ -> 
-                    #do nothing
-            end
+            # case choice do
+            #     1 ->
+            #         #act 1
+            #     2 ->
+            #         #act 2
+            #     3 ->
+            #         #act 3
+            #     4 ->
+            #         #act 4
+            #     5 ->
+            #         #act 5
+            #     6 -> 
+            #         #do nothing
+            # end
             GenServer.cast(self(),{:pick_random,current_state + 1})
         end
         {:noreply,{x,acts}}  
