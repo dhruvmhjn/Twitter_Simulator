@@ -13,19 +13,18 @@ defmodule Boss do
         if role == "server" do
             #ipofsnode =to_string(:inet.ntoa(ip2))
             snode=String.to_atom("servernode@"<>ipofsnode)
-            IO.puts snode
+            IO.inspect snode
             Node.start snode
             Node.set_cookie :dmahajan
             :global.register_name(:server_boss, self())
-            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>"192.168.0.10")]) 
+            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>"192.168.0.12")]) 
         else
 
             snode=String.to_atom("clientnode@"<>ipofsnode)
-            IO.puts snode
+            IO.inspect snode
             Node.start snode
             Node.set_cookie :dmahajan
             :global.register_name(:client_boss, self())
-           
             servernode = String.to_atom("servernode@"<>role)
             IO.inspect servernode
             abc = Node.connect(servernode)
