@@ -11,7 +11,6 @@ defmodule ClientSupervisor do
         children = Enum.map(n_list, fn(x)->worker(Client, [x,clients,servernode], [id: "client#{x}"]) end)
         supervise children, strategy: :one_for_one
     end
-
     def start_workers(sup,numClients,timePeriod,servernode) do
         {:ok, orcid} = Supervisor.start_child(sup, worker(Orc, [numClients,timePeriod,servernode]))                      
     end
