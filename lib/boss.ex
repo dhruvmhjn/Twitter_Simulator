@@ -32,6 +32,9 @@ defmodule Boss do
             IO.puts "THOS IS ABC"
             IO.inspect abc
             IO.inspect Node.list
+            IO.puts "pinging"
+            IO.inspect Node.ping(servernode)
+            IO.inspect Node.list
             :global.sync()
             ClientSupervisor.start_link([numClientsInt,timePeriodInt,servernode]) 
         end
