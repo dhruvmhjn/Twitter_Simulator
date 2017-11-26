@@ -5,12 +5,8 @@ defmodule ApplicationSupervisor do
         start_workers(sup,args)
         return
     end
-    
     def start_workers(sup, [numClients,timePeriod,clientnode]) do
-    
-            {:ok, serverid} = Supervisor.start_child(sup, worker(Server, [numClients,timePeriod,clientnode]))
-            #{:ok, orcid} = Supervisor.start_child(sup, worker(Orc, [numClients,timePeriod]))     
-            #Supervisor.start_child(sup, supervisor(ClientSupervisor, [numClients,timePeriod]))    
+            {:ok, serverid} = Supervisor.start_child(sup, worker(Server, [numClients,timePeriod,clientnode]))  
     end
     
     def init(_) do
