@@ -21,22 +21,22 @@ defmodule Client do
         #IO.puts "Client #{x} asked to activated, sub list = #{subscribe_to}"
         GenServer.cast({:server,servernode},{:subscribe,x,subscribe_to})
         #Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
-        #GenServer.cast(self,{:pick_random,1})
+        GenServer.cast(self,{:pick_random,1})
         {:noreply,{x,acts,servernode}}
     end
 
     def handle_cast({:pick_random,current_state},{x,acts,servernode}) do
         if(current_state >=  acts) do
-        
+        #
         else
             choice = rem(:rand.uniform()*100000,5)
              case choice do
                  1 -> subscribe(x,servernode)
 
-                 2 ->  tweet(x,servernode)
+                 2 -> tweet(x,servernode)
 
                  3 ->"three"
-                 
+
                  4 ->"four"
 
                  5 ->"five"
@@ -51,6 +51,10 @@ defmodule Client do
     def handle_cast({:deactivate},{x,acts,servernode})do
         #stop all activities, play dead
         #inform server
+        {:noreply,{x,acts,servernode}}
+    end
+    def handle_cast({:incoming_tweet,source,msg},{x,acts,servernode})do
+        IO.puts "user#{x} received a tweet from user#{source}:: #{msg}"
         {:noreply,{x,acts,servernode}}
     end
 
