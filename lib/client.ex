@@ -29,21 +29,23 @@ defmodule Client do
         
         else
             choice = rem(:rand.uniform()*100000,5)
-            cond do
-                choice == 1 ->
+            case choice do
+                1 ->
                     #act 1
-                choice == 2 ->
+                2 ->
                     #act 2
-                choice == 3 ->
+                3 ->
                     #act 3
-                choice == 4 ->
+                4 ->
                     #act 4
-                choice == 5 ->
+                5 ->
                     #act 5
+                _ -> 
+                    #do nothing
             end
             GenServer.cast(self(),{:pick_random,current_state + 1})
         end
-        {:noreply,{x,act_comp}}  
+        {:noreply,{x,acts}}  
     end
     def handle_cast({:deactivate},{x,acts})do
         #stop all activities, play dead
