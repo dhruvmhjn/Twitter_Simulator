@@ -8,7 +8,7 @@ defmodule Boss do
         numClientsInt = String.to_integer(numClients)
         timePeriodInt = String.to_integer(timePeriod)
         {:ok,[{ip,_,_}|tail]}=:inet.getif()
-        [{ip2,_,_}|tail2]=tail
+        [{ip2,_,_}|_]=tail
         ipofsnode =to_string(:inet.ntoa(ip2))
         if role == "server" do
             #ipofsnode =to_string(:inet.ntoa(ip2))
