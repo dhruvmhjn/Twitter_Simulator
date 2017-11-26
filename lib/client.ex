@@ -34,19 +34,14 @@ defmodule Client do
                  1 -> subscribe(x,servernode)
 
                  2 ->  tweet(x,servernode)
-                     #act 2
 
                  3 ->"three"
-                     #act 3
-
+                 
                  4 ->"four"
-                     #act 4
 
                  5 ->"five"
-                     #act 5
 
                  _ -> 
-                     #do nothing
 
              end
             GenServer.cast(self(),{:pick_random,current_state + 1})
