@@ -4,15 +4,33 @@ defmodule Boss do
     end
     defp parse_args(args) do
         cmdarg = OptionParser.parse(args)
-        {[],[numClients,timePeriod],[]} = cmdarg
+        {[],[numClients,timePeriod,role],[]} = cmdarg
         numClientsInt = String.to_integer(numClients)
         timePeriodInt = String.to_integer(timePeriod)
+        {:ok,[{ip,_,_}|tail]}=:inet.getif()
+        [{ip2,_,_}|tail2]=tail
+        ipofsnode =to_string(:inet.ntoa(ip))
+        if role == "server" do
+            snode=String.to_atom("servernode@"<>ipofsnode)
+            IO.puts snode
+            Node.start snode
+            Node.set_cookie :dmahajan
+            :global.register_name(:server_boss, self())
+            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>ipofsnode]) 
+        else
 
-        #Register yourself
-        Process.register(self(),:boss)
-        
-        ApplicationSupervisor.start_link([numClientsInt,timePeriodInt])
-        
+            snode=String.to_atom("clientnode@"<>ipofsnode)
+            IO.puts snode
+            Node.start snode
+            Node.set_cookie :dmahajan
+            :global.register_name(:client_boss, self())
+           
+            servernode = String.to_atom("servernode@"<>role)
+            abc = Node.connect(servernode)
+            IO.inspect abc
+            :global.sync()
+            ClientSupervisor.start_link([numClientsInt,timePeriodInt,servernode]) 
+        end
         boss_receiver(numClientsInt,timePeriodInt)
     end
             

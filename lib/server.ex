@@ -1,6 +1,6 @@
 defmodule Server do
     use GenServer
-    def start_link(n,_) do
+    def start_link(n,_,clientnode) do
         GenServer.start_link(__MODULE__, {n}, name: String.to_atom("server"))    
     end
     def init({n}) do        

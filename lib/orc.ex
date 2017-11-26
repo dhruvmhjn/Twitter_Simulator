@@ -1,6 +1,6 @@
 defmodule Orc do
     use GenServer
-    def start_link(numClients,timePeriod) do
+    def start_link(numClients,timePeriod,servernode) do
         myname = String.to_atom("orc")
         return = GenServer.start_link(__MODULE__, {numClients,timePeriod}, name: myname )
         return
