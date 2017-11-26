@@ -23,9 +23,12 @@ defmodule Server do
      def handle_cast({:subscribe,x,subscribe_to},{n})do
         #update table (add subscribe to for user x)
         [{_,old_list,_,_}] = :ets.lookup(:tab_user, x)
-        new_list = old_list++subscribe_to
+        subscribe_to = subscribe_to -- [x]
+        new_list = Enum.uniq(old_list++subscribe_to)
         :ets.update_element(:tab_user, x, {2, new_list})
-        IO.inspect :ets.lookup(:tab_user,x)
+        #update table (add x to followers list)
+        res = Enum.map(subscribe_to, fn(y)->:ets.update_element(:tab_user, y, {3, [x]++List.flatten(:ets.match(:tab_user, {y,:"_",:"$1",:"_"}))})end)
+        IO.inspect :ets.select(:tab_user, [{{:"$1", :"$2", :"$3",:"$4"}, [], [:"$_"]}])
         {:noreply,{n}}
      end
      def handle_cast({:tweet,x,msg},{n})do
