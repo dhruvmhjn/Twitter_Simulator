@@ -27,6 +27,7 @@ defmodule Boss do
             :global.register_name(:client_boss, self())
            
             servernode = String.to_atom("servernode@"<>role)
+            IO.inspect servernode
             abc = Node.connect(servernode)
             IO.puts "THOS IS ABC"
             IO.inspect abc
