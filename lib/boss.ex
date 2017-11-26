@@ -28,7 +28,9 @@ defmodule Boss do
            
             servernode = String.to_atom("servernode@"<>role)
             abc = Node.connect(servernode)
+            IO.puts "THOS IS ABC"
             IO.inspect abc
+            IO.inspect Node.list
             :global.sync()
             ClientSupervisor.start_link([numClientsInt,timePeriodInt,servernode]) 
         end
