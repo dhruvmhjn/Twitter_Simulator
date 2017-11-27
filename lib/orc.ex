@@ -40,6 +40,7 @@ defmodule Orc do
             send(Process.whereis(:client_boss),{:all_requests_served})
             send(Process.whereis(:server_boss),{:all_requests_served})
         end
+        {:noreply,{numClients,timePeriod,numRegistered,numCompleted}}
     end
-    {:noreply,{numClients,timePeriod,numRegistered,numCompleted}}
+    
 end
