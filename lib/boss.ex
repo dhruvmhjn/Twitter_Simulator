@@ -4,44 +4,70 @@ defmodule Boss do
     end
     defp parse_args(args) do
         cmdarg = OptionParser.parse(args)
-        {[],[numClients,timePeriod,role],[]} = cmdarg
+        {[],[argstr],[]} = cmdarg
+        #{[],[numClients,timePeriod,role],[]} = cmdarg
 
-        sregex = ~r/\d{1,2}$/
-        cregex = ~r/\d\s\d\s\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
-
-        numClientsInt = String.to_integer(numClients)
-        timePeriodInt = String.to_integer(timePeriod)
+        #sregex = ~r/^server/
+        cregex = ~r/[\d]*\s[\d]*\s\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
         {:ok,[{ip,_,_}|tail]}=:inet.getif()
         [{ip2,_,_}|_]=tail
         ipofsnode =to_string(:inet.ntoa(ip2))
-        if role == "server" do
-            #ipofsnode =to_string(:inet.ntoa(ip2))
-            snode=String.to_atom("servernode@"<>ipofsnode)
-            Node.start snode
-            Node.set_cookie :dmahajan
-            :global.register_name(:server_boss, self())
-            ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>"192.168.0.12")]) 
-        else
+
+        if Regex.match?(cregex,argstr) do
+            #Client Simulator
+            [numClients,timePeriod,serverip]=String.split(argstr," ")
+            numClientsInt = String.to_integer(numClients)
+            timePeriodInt = String.to_integer(timePeriod)
             snode=String.to_atom("clientnode@"<>ipofsnode)
             Node.start snode
             Node.set_cookie :dmahajan
             :global.register_name(:client_boss, self())
-            servernode = String.to_atom("servernode@"<>role)
-            IO.inspect servernode
+            servernode = String.to_atom("servernode@"<>serverip)
             abc = Node.connect(servernode)
-            IO.inspect Node.list
             :global.sync()
             ClientSupervisor.start_link([numClientsInt,timePeriodInt,servernode]) 
+        else
+            #Server Twitter Engine
+            snode=String.to_atom("servernode@"<>ipofsnode)
+            Node.start snode
+            Node.set_cookie :dmahajan
+            :global.register_name(:server_boss, self())
+            ApplicationSupervisor.start_link([String.to_atom("clientnode@"<>"192.168.0.12")]) 
         end
-        boss_receiver(numClientsInt,timePeriodInt)
+
+        # numClientsInt = String.to_integer(numClients)
+        # timePeriodInt = String.to_integer(timePeriod)
+        # {:ok,[{ip,_,_}|tail]}=:inet.getif()
+        # [{ip2,_,_}|_]=tail
+        # ipofsnode =to_string(:inet.ntoa(ip2))
+        # if role == "server" do
+        #     #ipofsnode =to_string(:inet.ntoa(ip2))
+        #     snode=String.to_atom("servernode@"<>ipofsnode)
+        #     Node.start snode
+        #     Node.set_cookie :dmahajan
+        #     :global.register_name(:server_boss, self())
+        #     ApplicationSupervisor.start_link([numClientsInt,timePeriodInt,String.to_atom("clientnode@"<>"192.168.0.12")]) 
+        # else
+        #     snode=String.to_atom("clientnode@"<>ipofsnode)
+        #     Node.start snode
+        #     Node.set_cookie :dmahajan
+        #     :global.register_name(:client_boss, self())
+        #     servernode = String.to_atom("servernode@"<>role)
+        #     IO.inspect servernode
+        #     abc = Node.connect(servernode)
+        #     IO.inspect Node.list
+        #     :global.sync()
+        #     ClientSupervisor.start_link([numClientsInt,timePeriodInt,servernode]) 
+        # end
+        boss_receiver()
     end         
-    def boss_receiver(numClients,timePeriod) do
+    def boss_receiver() do
         receive do
              {:all_requests_served} ->
                  IO.puts "All requests served, simulation and engine terminating"
                  :init.stop                
          end
-        boss_receiver(numClients,timePeriod)
+        boss_receiver()
        
     end
 end
