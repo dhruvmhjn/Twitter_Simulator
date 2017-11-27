@@ -37,10 +37,8 @@ defmodule Boss do
     end         
     def boss_receiver(numClients,timePeriod) do
         receive do
-             {:all_requests_served,b} ->
-                 #avg = b/(numNodes*numRequests)
-                 IO.puts "Total Hops: #{b}"
-                #  IO.puts "Average Hops: #{avg}"
+             {:all_requests_served} ->
+                 IO.puts "All requests served, simulation and engine terminating"
                  :init.stop                
          end
         boss_receiver(numClients,timePeriod)
