@@ -1,13 +1,13 @@
 defmodule Client do
     use GenServer
-    def start_link(x,clients,servernode) do
+    def start_link(x,clients,servernode,acts) do
         input_srt = Integer.to_string(x)
-        GenServer.start_link(__MODULE__, {x,servernode}, name: String.to_atom("user#{x}"))    
+        GenServer.start_link(__MODULE__, {x,servernode,acts}, name: String.to_atom("user#{x}"))    
     end
 
-    def init({x,servernode}) do        
+    def init({x,servernode,acts}) do        
        # register self
-        {:ok, {x,10,servernode}}
+        {:ok, {x,acts,servernode}}
     end
 
     def handle_cast({:register},{x,acts,servernode})do
@@ -26,8 +26,8 @@ defmodule Client do
     end
 
     def handle_cast({:pick_random,current_state},{x,acts,servernode}) do
-        if(current_state >=  acts) do
-        #
+        if(current_state ==  acts) do
+            GenServer.cast(:orc, {:acts_completed})
         else
             choice = rem(round(:rand.uniform()*100000),5)
              case choice do
