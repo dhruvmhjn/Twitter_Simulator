@@ -20,7 +20,10 @@ defmodule Client do
         #Subcribe to users
         #IO.puts "Client #{x} asked to activated, sub list = #{subscribe_to}"
         GenServer.cast({:server,servernode},{:subscribe,x,subscribe_to})
-        #Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
+        
+        #ZIPF: Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
+        acts = acts * length(subscribe_to)
+        
         GenServer.cast(self,{:pick_random,1})
         {:noreply,{x,acts,servernode,clients}}
     end
