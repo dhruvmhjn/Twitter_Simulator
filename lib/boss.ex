@@ -4,19 +4,21 @@ defmodule Boss do
     end
     defp parse_args(args) do
         cmdarg = OptionParser.parse(args)
-        {[],[argstr],[]} = cmdarg
+
+        {[],argstr,[]} = cmdarg
         #{[],[numClients,timePeriod,role],[]} = cmdarg
 
         #sregex = ~r/^server/
-        cregex = ~r/[\d]*\s[\d]*\s\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
+
+        ipregex = ~r/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
         {:ok,[{ip,_,_}|tail]}=:inet.getif()
         [{ip2,_,_}|_]=tail
         ipofsnode =to_string(:inet.ntoa(ip2))
 
-        if Regex.match?(cregex,argstr) do
+        if Enum.count(argstr)==3 && Regex.match?(ipregex,Enum.at(argstr,2)) do
             #Client Simulator
             
-            [numClients,timePeriod,serverip]=String.split(argstr," ")
+            [numClients,timePeriod,serverip]=argstr
             numClientsInt = String.to_integer(numClients)
             timePeriodInt = String.to_integer(timePeriod)
             snode=String.to_atom("clientnode@"<>ipofsnode)
