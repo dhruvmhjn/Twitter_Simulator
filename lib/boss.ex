@@ -5,6 +5,10 @@ defmodule Boss do
     defp parse_args(args) do
         cmdarg = OptionParser.parse(args)
         {[],[numClients,timePeriod,role],[]} = cmdarg
+
+        sregex = ~r/\d{1,2}$/
+        cregex = ~r/\d\s\d\s\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
+
         numClientsInt = String.to_integer(numClients)
         timePeriodInt = String.to_integer(timePeriod)
         {:ok,[{ip,_,_}|tail]}=:inet.getif()
