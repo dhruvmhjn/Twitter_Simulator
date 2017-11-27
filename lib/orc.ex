@@ -42,5 +42,4 @@ defmodule Orc do
         end
     end
     {:noreply,{numClients,timePeriod,numRegistered,numCompleted}}
-
 end
