@@ -44,7 +44,7 @@ defmodule Server do
         tweetid = Integer.to_string(x)<>"T"<>Integer.to_string(old_count+1)
         :ets.insert_new(:tab_tweet, {tweetid,x,msg})
         #cast message to all subscribers of x if ALIVE
-        Enum.map(followers_list,fn(y)-> Genserver.cast({String.to_atom("user"<>Integer.to_string(y)),clientnode},{:incoming_tweet,x,msg})end)
+        Enum.map(followers_list,fn(y)-> GenServer.cast({String.to_atom("user"<>Integer.to_string(y)),clientnode},{:incoming_tweet,x,msg})end)
 
         {:noreply,{n,clientnode}}
      end
