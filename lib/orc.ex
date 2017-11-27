@@ -37,8 +37,8 @@ defmodule Orc do
         numCompleted= numCompleted + 1
         if(numCompleted == numClients) do
             :global.sync()
-            send(Process.whereis(:client_boss),{:all_requests_served})
-            send(Process.whereis(:server_boss),{:all_requests_served})
+            send(:global.whereis_name(:client_boss),{:all_requests_served})
+            send(:global.whereis_name(:server_boss),{:all_requests_served})
         end
         {:noreply,{numClients,timePeriod,numRegistered,numCompleted}}
     end
