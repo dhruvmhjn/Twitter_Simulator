@@ -40,7 +40,7 @@ defmodule Client do
 
                  4 -> querymentions(x,clients,servernode)
 
-                 5 -> #querytweets(x)
+                 _ -> #querytweets(x)
 
             end
             GenServer.cast(self(),{:pick_random,current_state + 1})
