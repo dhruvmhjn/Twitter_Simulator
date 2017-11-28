@@ -60,14 +60,14 @@ defmodule Server do
         #list of tweetids for hashtag
         list = List.flatten(:ets.match(:tab_hashtag,{hashtag,:"$1"}))
         result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweets,x)end)
-        Genserver.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
+        GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
      end
      def handle_cast({:mentions,x,mention},{clientnode})do
         #list of tweetids for mention
         list = List.flatten(:ets.match(:tab_mentions,{mention,:"$1"}))
         result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweets,x)end)
-        Genserver.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
+        GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
      end
     def hashtag_update(tweetid,msg) do
