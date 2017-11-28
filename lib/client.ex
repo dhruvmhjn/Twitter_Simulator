@@ -36,13 +36,11 @@ defmodule Client do
 
                  2 -> tweet(x,servernode)
 
-                 3 ->"three"
+                 3 -> queryhashtags(x,servernode)
 
-                 4 ->"four"
+                 4 -> querymentions(x,clients,servernode)
 
-                 5 ->"five"
-
-                 _ -> 
+                 5 -> #querytweets(x)
 
             end
             GenServer.cast(self(),{:pick_random,current_state + 1})
@@ -61,6 +59,11 @@ defmodule Client do
         {:noreply,{x,acts,servernode,clients}}
     end
 
+    def handle_cast({:query_result,result},{x,acts,servernode,clients})do
+        IO.puts "user #{x} received result of query:: #{result}"
+        {:noreply,{x,acts,servernode,clients}}
+    end
+
     def tweet(x,servernode) do
         #Generate a message
         msg = "160 random characters"
@@ -73,8 +76,15 @@ defmodule Client do
             GenServer.cast({:server,servernode},{:subscribe,x,[follow]})
         end
     end
-    def query() do
-        
+    def queryhashtags(x,servernode) do
+        #Pick a random hashtag
+        hashtag = "#twitter"
+        GenServer.cast({:server,servernode},{:hashtags,x,hashtag})
+    end
+    def querymentions(x,clients,servernode) do
+        #Pick a random user
+        mention = "@user"<>Integer.to_string(:rand.uniform(clients))
+        GenServer.cast({:server,servernode},{:mentions,x,mention})
     end
     
 end

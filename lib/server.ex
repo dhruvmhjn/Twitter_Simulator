@@ -10,7 +10,7 @@ defmodule Server do
         :ets.new(:tab_tweet, [:set, :protected, :named_table])
         :ets.new(:tab_msgq, [:set, :protected, :named_table])
         :ets.new(:tab_hashtag, [:set, :protected, :named_table])
-        :ets.new(:tab_mention, [:set, :protected, :named_table])
+        :ets.new(:tab_mentions, [:set, :protected, :named_table])
          {:ok, {clientnode}}
      end
      def handle_call({:simulator_add,address},_,{clientnode}) do
@@ -48,9 +48,40 @@ defmodule Server do
         #update tweet table (add msg to tweet list of x)
         tweetid = Integer.to_string(x)<>"T"<>Integer.to_string(old_count+1)
         :ets.insert_new(:tab_tweet, {tweetid,x,msg})
+        #update hashtag and mentions table
+        hashtag_update(tweetid,msg)
+        mentions_update(tweetid,msg)
         #cast message to all subscribers of x if ALIVE
         Enum.map(followers_list,fn(y)-> GenServer.cast({String.to_atom("user"<>Integer.to_string(y)),clientnode},{:incoming_tweet,x,msg})end)
 
         {:noreply,{clientnode}}
      end
+     def handle_cast({:hashtags,x,hashtag},{clientnode})do
+        #list of tweetids for hashtag
+        list = List.flatten(:ets.match(:tab_hashtag,{hashtag,:"$1"}))
+        result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweets,x)end)
+        Genserver.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
+        {:noreply,{clientnode}}
+     end
+     def handle_cast({:mentions,x,mention},{clientnode})do
+        #list of tweetids for mention
+        list = List.flatten(:ets.match(:tab_mentions,{mention,:"$1"}))
+        result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweets,x)end)
+        Genserver.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
+        {:noreply,{clientnode}}
+     end
+    def hashtag_update(tweetid,msg) do
+         hashregex = ~r/\#\w*/
+         tags = List.flatten(Regex.scan(hashregex,msg))    
+         Enum.map(tags, fn(x)-> if :ets.insert_new(:tab_hashtag,{x,[tweetid]}) == false do
+             :ets.update_element(:tab_hashtag,x,{2,[tweetid]++List.flatten(:ets.match(:tab_hashtag,{x,:"$1"}))}) end end) 
+    end
+    def mentions_update(tweetid,msg) do
+        hashregex = ~r/\@\w*/
+        tags = List.flatten(Regex.scan(hashregex,msg))    
+        Enum.map(tags, fn(x)-> if :ets.insert_new(:tab_mentions,{x,[tweetid]}) == false do
+            :ets.update_element(:tab_mentions,x,{2,[tweetid]++List.flatten(:ets.match(:tab_mentions,{x,:"$1"}))}) end end) 
+        
+    end
+
 end
