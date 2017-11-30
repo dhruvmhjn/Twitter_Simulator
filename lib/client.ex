@@ -63,7 +63,7 @@ defmodule Client do
             end
             GenServer.cast(self(),{:pick_random,current_state + 1})
         else
-            IO.puts "completed acts for user #{x}: #{acts}"
+            #IO.puts "completed acts for user #{x}: #{acts}"
             GenServer.cast(:orc, {:acts_completed})
         end
         {:noreply,{x,acts,servernode,clients,tweets_pool}}  
