@@ -28,7 +28,7 @@ defmodule Orc do
 
     def handle_cast({:begin_activate},{numClients,timePeriod,numRegistered,numCompleted})do
         n_list = Enum.to_list 1..numClients
-        sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,:rand.uniform(10)), fn(_)->:rand.uniform(numClients)end)end)
+        sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,Float.ceil(numClients*0.01)), fn(_)->:rand.uniform(numClients)end)end)
         Enum.map(n_list, fn(x) -> GenServer.cast(String.to_atom("user"<>Integer.to_string(x)),{:activate, Enum.uniq(Enum.at(sub_list,x-1))}) end)
         {:noreply,{numClients,timePeriod,numRegistered,numCompleted}}
     end
@@ -36,6 +36,7 @@ defmodule Orc do
     def handle_cast({:acts_completed},{numClients,timePeriod,numRegistered,numCompleted}) do
         numCompleted= numCompleted + 1
         if(numCompleted == numClients) do
+            Process.sleep(1000)
             :global.sync()
             send(:global.whereis_name(:client_boss),{:all_requests_served})
             send(:global.whereis_name(:server_boss),{:all_requests_served})

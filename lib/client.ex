@@ -22,6 +22,31 @@ defmodule Client do
         GenServer.cast({:server,servernode},{:subscribe,x,subscribe_to})
         
         #ZIPF: Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
+
+        acts = cond do
+            x <= (clients*0.01) ->
+                acts * 100
+                
+            x <= (clients*0.1) ->
+                acts * 10
+            
+            x <= (clients*0.7) ->
+                acts * 5
+
+            true ->
+                acts
+
+        end
+
+        # if (x < (clients*0.1)) do
+        #     acts = acts * 10
+        # end
+        # if (x < (clients*.01) do
+        #     acts = acts * 100
+        # end
+
+        # if 
+
         acts = acts * length(subscribe_to)
         
         GenServer.cast(self,{:pick_random,1})
@@ -32,15 +57,22 @@ defmodule Client do
         if(current_state < acts) do
             choice = rem(round(:rand.uniform()*100000),5)
             case choice do
-                 1 -> subscribe(x,servernode,clients)
+                1 ->   
+                    #subscribe(x,servernode,clients)
+                    tweet(x,servernode)  
 
-                 2 -> tweet(x,servernode)
+                2 -> 
+                    tweet(x,servernode)
 
-                 3 -> queryhashtags(x,servernode)
+                3 ->
+                    queryhashtags(x,servernode)
 
-                 4 -> querymentions(x,clients,servernode)
+                4 ->
+                    querymentions(x,clients,servernode)
 
-                 _ -> #querytweets(x)
+                _ ->
+                    #querytweets(x)
+
 
             end
             GenServer.cast(self(),{:pick_random,current_state + 1})
