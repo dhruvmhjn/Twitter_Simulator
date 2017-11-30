@@ -40,7 +40,7 @@ defmodule Boss do
                 IO.puts "Successfully connected to server at #{serverip}."
                 IO.puts "Starting twitter simulation with #{numClients} users on node #{snode}"
                 IO.puts "The Activity level of each user is a multiple (ZIPF) of the Minimum activities entered."
-                ClientSupervisor.start_link([numClientsInt,minActsInt,servernode]) 
+                ClientSupervisor.start_link([numClientsInt,minActsInt,subPercentInt,servernode]) 
             else
                 IO.puts "Can't connect to server at #{serverip} , try again."
             end
