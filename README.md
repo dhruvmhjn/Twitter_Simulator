@@ -1,8 +1,9 @@
 #To Do
 1) Alive, or not
-2) Tweet pool
-3) Randomly pick an activity zipf
-4) retweet
+2) Add check for RT
+3) Percentage of total people to follow
+4) Scuscriber lists according to ZIPf rank
+
 
 **Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
 
