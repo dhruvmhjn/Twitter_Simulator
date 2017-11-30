@@ -6,9 +6,9 @@ defmodule ClientSupervisor do
         GenServer.cast(:orc,{:spawn_complete})
         return
     end
-    def init({clients,time,servernode}) do
+    def init({clients,acts,servernode}) do
         n_list = Enum.to_list 1..clients
-        children = Enum.map(n_list, fn(x)->worker(Client, [x,clients,servernode,time], [id: "client#{x}"]) end)
+        children = Enum.map(n_list, fn(x)->worker(Client, [x,clients,servernode,acts], [id: "client#{x}"]) end)
         supervise children, strategy: :one_for_one
     end
     def start_workers(sup,numClients,acts,subPercent,servernode) do
