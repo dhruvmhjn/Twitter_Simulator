@@ -38,8 +38,8 @@ defmodule Client do
                 acts
 
         end
-
-        acts = acts * length(subscribe_to)
+        
+        #acts = acts * length(subscribe_to)
         
         GenServer.cast(self,{:pick_random,1})
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
@@ -63,6 +63,7 @@ defmodule Client do
             end
             GenServer.cast(self(),{:pick_random,current_state + 1})
         else
+            IO.puts "completed acts for user #{x}: #{acts}"
             GenServer.cast(:orc, {:acts_completed})
         end
         {:noreply,{x,acts,servernode,clients,tweets_pool}}  
@@ -82,7 +83,7 @@ defmodule Client do
             end
             GenServer.cast({:server,servernode},{:tweet,x,rt_msg})
         end
-        {:noreply,{x,acts,servernode,clients}}
+        {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
 
     def handle_cast({:query_result,result},{x,acts,servernode,clients,tweets_pool})do
