@@ -75,8 +75,8 @@ defmodule Client do
     def handle_cast({:incoming_tweet,source,msg},{x,acts,servernode,clients,tweets_pool})do
         #IO.puts "user#{x} received a tweet from user#{source}:: #{msg}"
         if (:rand.uniform(100) == 50) do
-            rt_msg = if (Regex.match?( ~r/^RT, Source:/ , msg)) do
-                 msg
+            rt_msg = if (Regex.match?(~r/^RT, Source:/ , msg)) do
+                msg
             else
                 "RT, Source: #{source}" <> msg
             end
