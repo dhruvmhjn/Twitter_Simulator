@@ -1,3 +1,9 @@
+#To Do
+1) Alive, or not
+2) Tweet pool
+3) Randomly pick an activity zipf
+4) retweet
+
 **Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
 
 When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
