@@ -66,7 +66,7 @@ defmodule Client do
     def handle_cast({:deactivate},{x,acts,servernode,clients,tweets_pool})do
         #stop all activities, play dead
         #inform server
-        {:noreply,{x,acts,servernode,clients}}
+        {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
     def handle_cast({:incoming_tweet,source,msg},{x,acts,servernode,clients,tweets_pool})do
         #IO.puts "user#{x} received a tweet from user#{source}:: #{msg}"
@@ -83,7 +83,7 @@ defmodule Client do
     end
 
     def handle_cast({:query_result,result},{x,acts,servernode,clients,tweets_pool})do
-        #IO.puts "user #{x} received result of query:: #{result}"
+        IO.puts "user #{x} received result of query:: #{result}"
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
 
