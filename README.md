@@ -1,6 +1,5 @@
 #To Do
 1) Alive, or not
-2) Add check for RT
 3) Percentage of total people to follow
 4) Scuscriber lists according to ZIPf rank
 
