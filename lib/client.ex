@@ -11,7 +11,7 @@ defmodule Client do
     end
 
     def handle_cast({:register},{x,acts,servernode,clients,tweets_pool})do
-        tweets_pool = ["160 characters from user #{x}","COP5063 is a good course","last sample tweet","one more tweer","One more", "And one more"]
+        tweets_pool = ["160 characters from user #{x}.","COP5615 is a good course.","This is a sample tweet.","Random tweet from user.","One more random tweet.", "And one more."]
         #ZIPF: Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
         acts = cond do
              x <= (clients*0.01) ->
@@ -64,7 +64,6 @@ defmodule Client do
             Process.sleep (:rand.uniform(500))
             GenServer.cast(self(),{:pick_random,current_state + 1})
         else
-            #IO.puts "completed acts for user #{x}: #{acts}"
             GenServer.cast(:orc, {:acts_completed})
         end
         {:noreply,{x,acts,servernode,clients,tweets_pool}}  
