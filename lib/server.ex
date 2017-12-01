@@ -39,7 +39,7 @@ defmodule Server do
      def handle_cast({:reconnection,x},{clientnode})do
         :ets.update_element(:tab_user,x,{4, "connected"})
         [{_,tweetlist}]=:ets.lookup(:tab_msgq,x)
-        ets.delete(:tab_msgq,x)
+        :ets.delete(:tab_msgq,x)
         result = Enum.map(tweetlist,fn(x)-> :ets.lookup(:tab_tweets,x)end)
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
@@ -67,7 +67,7 @@ defmodule Server do
         hashtag_update(tweetid,msg)
         mentions_update(tweetid,msg)
         #cast message to all subscribers of x if ALIVE
-        Enum.map(followers_list,fn(y)-> send_if_alive(y,x,msg,tweetid) end)
+        Enum.map(followers_list,fn(y)-> send_if_alive(y,x,msg,tweetid,clientnode) end)
 
         {:noreply,{clientnode}}
      end
@@ -85,7 +85,7 @@ defmodule Server do
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
      end
-     def send_if_alive(follower,sender,msg,tweetid)do
+     def send_if_alive(follower,sender,msg,tweetid,clientnode)do
         status = :ets.lookup_element(:tab_user,follower,4)
         if status == "connected" do
             GenServer.cast({String.to_atom("user"<>Integer.to_string(follower)),clientnode},{:incoming_tweet,sender,msg})
