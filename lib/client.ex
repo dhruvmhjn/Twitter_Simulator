@@ -27,8 +27,9 @@ defmodule Client do
 
     def handle_cast({:register},{x,acts,servernode,clients,tweets_pool})do
         #Send register request to server
-        GenServer.call({:server,servernode},{:registeruser,x})
-        GenServer.cast(:orc, {:registered})
+        #Process.sleep(:random(5000))
+        GenServer.cast({:server,servernode},{:registeruser,x})
+        #GenServer.cast(:orc, {:registered})
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
     def handle_cast({:activate, subscribe_to},{x,acts,servernode,clients,tweets_pool})do

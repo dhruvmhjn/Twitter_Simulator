@@ -1,5 +1,6 @@
 defmodule Server do
     use GenServer
+
     def start_link(clientnode) do
         GenServer.start_link(__MODULE__, {clientnode}, name: String.to_atom("server"))    
     end
@@ -13,21 +14,22 @@ defmodule Server do
         :ets.new(:tab_mentions, [:set, :protected, :named_table])
          {:ok, {clientnode}}
      end
-     def handle_call({:simulator_add,address},_,{clientnode}) do
-         clientnode = address
-         IO.puts "Connected to client simulator sucessfully."
-        {:reply,"ok",{clientnode}}
-     end
-     def handle_call({:registeruser,x},_,{clientnode}) do
+    #  def handle_call({:simulator_add,address},_,{clientnode}) do
+    #      clientnode = address
+    #      IO.puts "Connected to client simulator sucessfully."
+    #     {:reply,"ok",{clientnode}}
+    #  end
+     def handle_cast({:registeruser,x},{clientnode}) do
         #update table (add a new user x)
         IO.puts("Registering user #{x}")
 
         :ets.insert_new(:tab_user, {x, [], [], "alive",0})
         #res = :ets.lookup(:tab_user, "qwerty")
-        #IO.inspect res
-        [_,_,_,_,_,_,_,{:size, recsize},_,_,_,_,_] = :ets.info(:tab_user)
+        #IO.inspect ress
+        #[_,_,_,_,_,_,_,{:size, recsize},_,_,_,_,_] = :ets.info(:tab_user)
         #IO.inspect recsize
-        {:reply,"ok",{clientnode}}
+        GenServer.cast({:orc,clientnode},{:registered})
+        {:noreply,{clientnode}}
      end
      def handle_cast({:subscribe,x,subscribe_to},{clientnode})do
         #update table (add subscribe to for user x)
