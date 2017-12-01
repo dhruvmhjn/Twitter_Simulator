@@ -1,11 +1,11 @@
 defmodule Orc do
     use GenServer
-    def start_link(numClients,acts,subPercent,_) do
+    def start_link(numClients,acts,subPercent,servernode) do
         myname = String.to_atom("orc")
-        return = GenServer.start_link(__MODULE__, {numClients,acts,subPercent}, name: myname )
+        return = GenServer.start_link(__MODULE__, {numClients,acts,subPercent,servernode}, name: myname )
         return
     end
-    def init({numClients,acts,subPercent}) do
+    def init({numClients,acts,subPercent,servernode}) do
         {:ok,{numClients,acts,subPercent,0,0}}
     end
     def handle_cast({:spawn_complete},{numClients,acts,subPercent,numRegistered,numCompleted}) do

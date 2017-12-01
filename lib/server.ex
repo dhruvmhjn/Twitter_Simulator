@@ -14,11 +14,11 @@ defmodule Server do
         :ets.new(:tab_mentions, [:set, :protected, :named_table])
          {:ok, {clientnode}}
      end
-    #  def handle_call({:simulator_add,address},_,{clientnode}) do
-    #      clientnode = address
-    #      IO.puts "Connected to client simulator sucessfully."
-    #     {:reply,"ok",{clientnode}}
-    #  end
+     def handle_call({:simulator_add,address},_,{clientnode}) do
+         clientnode = address
+         IO.puts "Connected to client simulator sucessfully."
+        {:reply,"ok",{clientnode}}
+     end
      def handle_cast({:registeruser,x},{clientnode}) do
         #update table (add a new user x)
         IO.puts("Registering user #{x}")

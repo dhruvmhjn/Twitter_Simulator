@@ -37,6 +37,7 @@ defmodule Boss do
             connect_result = Node.connect(servernode)
             :global.sync()
             if (connect_result == true) do
+                GenServer.call({:server,servernode},{:simulator_add,snode})
                 IO.puts "Successfully connected to server at #{serverip}."
                 IO.puts "Starting twitter simulation with #{numClients} users on node #{snode}"
                 IO.puts "The Activity level of each user is a multiple (ZIPF) of the Minimum activities entered."
@@ -44,7 +45,6 @@ defmodule Boss do
             else
                 IO.puts "Can't connect to server at #{serverip} , try again."
             end
-            GenServer.call({:server,servernode},{:simulator_add,snode})
         end
         boss_receiver()
     end         
