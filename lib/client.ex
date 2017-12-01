@@ -61,6 +61,7 @@ defmodule Client do
                     #querytweets(x)
 
             end
+            Process.sleep (:rand.uniform(500))
             GenServer.cast(self(),{:pick_random,current_state + 1})
         else
             #IO.puts "completed acts for user #{x}: #{acts}"
