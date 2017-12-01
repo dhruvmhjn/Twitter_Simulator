@@ -22,7 +22,7 @@ defmodule Server do
         {:reply,"ok",{clientnode}}
     end
 
-    def handle_call({:simulator_add,address},_,{clientnode}) do
+    def handle_call({:simulator_add,address},_,{_}) do
          clientnode = address
          IO.puts "Connected to client simulator sucessfully at #{clientnode}."
         {:reply,"ok",{clientnode}}
@@ -58,7 +58,7 @@ defmodule Server do
         new_list = Enum.uniq(old_list++subscribe_to)
         :ets.update_element(:tab_user, x, {2, new_list})
         #update table (add x to followers list)
-        res = Enum.map(subscribe_to, fn(y)->:ets.update_element(:tab_user, y, {3, [x]++List.flatten(:ets.match(:tab_user, {y,:"_",:"$1",:"_"}))})end)
+        Enum.map(subscribe_to, fn(y)->:ets.update_element(:tab_user, y, {3, [x]++List.flatten(:ets.match(:tab_user, {y,:"_",:"$1",:"_"}))})end)
         #IO.inspect :ets.select(:tab_user, [{{:"$1", :"$2", :"$3",:"$4"}, [], [:"$_"]}])
         {:noreply,{clientnode}}
     end

@@ -10,7 +10,7 @@ defmodule Client do
        {:ok, {x,acts,servernode,clients,[]}}
     end
 
-    def handle_cast({:register},{x,acts,servernode,clients,tweets_pool})do
+    def handle_cast({:register},{x,acts,servernode,clients,_})do
         tweets_pool = ["160 characters from user #{x}.","COP5615 is a good course.","This is a sample tweet.","Random tweet from user.","One more random tweet.", "And one more."]
         #ZIPF: Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
         acts = cond do
