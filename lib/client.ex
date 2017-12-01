@@ -7,29 +7,27 @@ defmodule Client do
 
     def init({x,acts,servernode,clients}) do        
        # Register self
-       tweets_pool = ["160 characters from user #{x}","COP5063 is a good course","last sample tweet","one more tweer","One more", "And one more"]
-       #ZIPF: Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
-       acts = cond do
-            x <= (clients*0.01) ->
-                acts * 100
-                
-            x <= (clients*0.1) ->
-                acts * 10
-            
-            x <= (clients*0.6) ->
-                acts * 2
-
-            true ->
-                acts
-        end
        {:ok, {x,acts,servernode,clients,tweets_pool}}
     end
 
     def handle_cast({:register},{x,acts,servernode,clients,tweets_pool})do
-        #Send register request to server
-        #Process.sleep(:random(5000))
+        tweets_pool = ["160 characters from user #{x}","COP5063 is a good course","last sample tweet","one more tweer","One more", "And one more"]
+        #ZIPF: Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
+        acts = cond do
+             x <= (clients*0.01) ->
+                 acts * 100
+                 
+             x <= (clients*0.1) ->
+                 acts * 10
+             
+             x <= (clients*0.6) ->
+                 acts * 2
+ 
+             true ->
+                 acts
+         end
         GenServer.cast({:server,servernode},{:registeruser,x})
-        #GenServer.cast(:orc, {:registered})
+        
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
     def handle_cast({:activate, subscribe_to},{x,acts,servernode,clients,tweets_pool})do
