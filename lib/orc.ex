@@ -1,6 +1,6 @@
 defmodule Orc do
     use GenServer
-    def start_link(numClients,acts,subPercent,servernode) do
+    def start_link(numClients,acts,subPercent,_) do
         myname = String.to_atom("orc")
         return = GenServer.start_link(__MODULE__, {numClients,acts,subPercent}, name: myname )
         return
@@ -26,23 +26,6 @@ defmodule Orc do
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted}}
     end
 
-    def bais(numClients) do
-        case rem(:rand.uniform(99999),7) do
-            1 ->
-                :rand.uniform(round(numClients*0.1))
-            2 ->
-                :rand.uniform(round(numClients*0.1))
-            3 ->
-                :rand.uniform(round(numClients*0.6))
-            4 ->
-                :rand.uniform(numClients)
-            5 ->
-                :rand.uniform(numClients)
-            _ ->
-                :rand.uniform(round(numClients*0.01))
-        end
-    end
-
     def handle_cast({:begin_activate},{numClients,acts,subPercent,numRegistered,numCompleted})do
         n_list = Enum.to_list 1..numClients
 
@@ -61,6 +44,23 @@ defmodule Orc do
             send(:global.whereis_name(:server_boss),{:all_requests_served})
         end
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted}}
+    end
+
+    def bais(numClients) do
+        case rem(:rand.uniform(99999),7) do
+            1 ->
+                :rand.uniform(round(numClients*0.1))
+            2 ->
+                :rand.uniform(round(numClients*0.1))
+            3 ->
+                :rand.uniform(round(numClients*0.6))
+            4 ->
+                :rand.uniform(numClients)
+            5 ->
+                :rand.uniform(numClients)
+            _ ->
+                :rand.uniform(round(numClients*0.01))
+        end
     end
     
 end
