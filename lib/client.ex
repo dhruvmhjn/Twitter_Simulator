@@ -62,7 +62,7 @@ defmodule Client do
 
             end
             Process.sleep (:rand.uniform(100))
-            IO.puts "client #{x} act #{act}"
+            IO.puts "client #{x} act #{acts}"
             GenServer.cast(self(),{:pick_random,current_state + 1})
         else
             GenServer.cast(:orc, {:acts_completed})
