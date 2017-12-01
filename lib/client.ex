@@ -7,7 +7,7 @@ defmodule Client do
 
     def init({x,acts,servernode,clients}) do        
        # Register self
-       {:ok, {x,acts,servernode,clients,tweets_pool}}
+       {:ok, {x,acts,servernode,clients,[]}}
     end
 
     def handle_cast({:register},{x,acts,servernode,clients,tweets_pool})do
