@@ -74,9 +74,9 @@ defmodule Client do
             rt_msg = if (Regex.match?(~r/^RT, Source:/ , msg)) do
                 msg
             else
-                "RT, Source: #{source}" <> msg
+                "RT, Source: #{source} Tweet: " <> msg
             end
-            IO.puts "Retweeting: "<>rt_msg
+            #IO.puts "Retweeting: "<>rt_msg
             GenServer.cast({:server,servernode},{:tweet,x,rt_msg})
         end
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
