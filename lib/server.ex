@@ -46,7 +46,8 @@ defmodule Server do
         [{_,tweetlist}]=:ets.lookup(:tab_msgq,x)
         :ets.delete(:tab_msgq,x)
         result = Enum.map(tweetlist,fn(x)-> :ets.lookup(:tab_tweet,x)end)
-        IO.puts "Dump for user#{x} :: #{result}"
+        IO.puts "Dump for user#{x} ::" 
+        IO.inspect "#{result}"
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
     end
