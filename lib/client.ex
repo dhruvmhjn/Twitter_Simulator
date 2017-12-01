@@ -83,7 +83,7 @@ defmodule Client do
     end
 
     def handle_cast({:query_result,result},{x,acts,servernode,clients,tweets_pool})do
-        IO.puts "user #{x} received result of query:: #{result}"
+        #IO.puts "user #{x} received result of query:: #{result}"
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
 
