@@ -41,7 +41,7 @@ defmodule Client do
 
     def handle_cast({:pick_random,current_state},{x,acts,servernode,clients,tweets_pool}) do
         if(current_state < acts) do
-            choice = rem(:rand.uniform(999999),10)
+            choice = rem(:rand.uniform(999999),14)
             case choice do
                 1 ->   
                     #subscribe(x,servernode,clients)
@@ -49,6 +49,12 @@ defmodule Client do
 
                 2 -> 
                     tweet_mention(x,servernode,tweets_pool,clients)
+
+                3 ->
+                    queryhashtags(x,servernode)
+
+                4 ->
+                    query_self_mentions(x,servernode)
 
                 _ ->
                     tweet(x,servernode,tweets_pool)
@@ -115,11 +121,10 @@ defmodule Client do
     end
     def queryhashtags(x,servernode) do
         #Pick a random hashtag
-        hashtag = "#twitter"
+        hashtag = "#hashtag" <>Integer.to_string(:rand.uniform(999))
         GenServer.cast({:server,servernode},{:hashtags,x,hashtag})
     end
-    def query_self_mentions(x,_,servernode) do
-        #Pick a random user
+    def query_self_mentions(x,servernode) do
         mention = "@user"<>Integer.to_string(x)
         GenServer.cast({:server,servernode},{:mentions,x,mention})
     end
