@@ -13,7 +13,7 @@ defmodule Boss do
         #ipregex = ~r/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
         {:ok,[{ip,_,_}|tail]}=:inet.getif()
         [{ip2,_,_}|_]=tail
-        ipofsnode =to_string(:inet.ntoa(ip2))
+        ipofsnode =to_string(:inet.ntoa(ip))
 
         if Regex.match?(sregex,Enum.at(argstr,0)) do
             #Server Twitter Engine
@@ -37,6 +37,7 @@ defmodule Boss do
             connect_result = Node.connect(servernode)
             :global.sync()
             if (connect_result == true) do
+                GenServer.call({:server,servernode},{:simulator_add,snode})
                 IO.puts "Successfully connected to server at #{serverip}."
                 IO.puts "Starting twitter simulation with #{numClients} users on node #{snode}"
                 IO.puts "The Activity level of each user is a multiple (ZIPF) of the Minimum activities entered."
@@ -44,7 +45,6 @@ defmodule Boss do
             else
                 IO.puts "Can't connect to server at #{serverip} , try again."
             end
-            GenServer.call({:server,servernode},{:simulator_add,snode})
         end
         boss_receiver()
     end         
