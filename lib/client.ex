@@ -53,8 +53,8 @@ defmodule Client do
                 # 3 ->
                 #     #queryhashtags(x,servernode)
 
-                # #4 ->
-                #     #query_self_mentions(x,servernode)
+                4 ->
+                    query_self_mentions(x,servernode)
 
                 _ ->
                     tweet(x,servernode,tweets_pool)
@@ -62,7 +62,7 @@ defmodule Client do
 
             end
             Process.sleep (:rand.uniform(100))
-            IO.puts "client #{x} act #{acts}"
+            #IO.puts "client #{x} act #{acts}"
             GenServer.cast(self(),{:pick_random,current_state + 1})
         else
             GenServer.cast(:orc, {:acts_completed})
@@ -92,7 +92,7 @@ defmodule Client do
     end
 
     def handle_cast({:query_result,result},{x,acts,servernode,clients,tweets_pool})do
-        IO.puts "user #{x} received result of query:: #{result}"
+        IO.puts "user#{x} received result of query:: #{result}"
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
 
