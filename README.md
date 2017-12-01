@@ -1,7 +1,7 @@
 #To Do
 1) Alive, or not
-2) Percentage of total people to follow
-3) Subscribers lists according to ZIPf rank
+<!-- 2) Percentage of total people to follow
+3) Subscribers lists according to ZIPf rank -->
 4) Size of ets
 
 **Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
