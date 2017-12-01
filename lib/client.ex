@@ -50,11 +50,11 @@ defmodule Client do
                 2 -> 
                     tweet_mention(x,servernode,tweets_pool,clients)
 
-                3 ->
-                    queryhashtags(x,servernode)
+                # 3 ->
+                #     #queryhashtags(x,servernode)
 
-                4 ->
-                    query_self_mentions(x,servernode)
+                # #4 ->
+                #     #query_self_mentions(x,servernode)
 
                 _ ->
                     tweet(x,servernode,tweets_pool)
