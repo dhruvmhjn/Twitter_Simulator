@@ -32,7 +32,7 @@ defmodule Orc do
         sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,round(Float.ceil(numClients*subPercent/1000))), fn(_)-> bais(numClients) end) end)
         
         Enum.map(n_list, fn(x) -> GenServer.cast(String.to_atom("user"<>Integer.to_string(x)),{:activate, Enum.uniq(Enum.at(sub_list,x-1))}) end)
-        GenServer.cast(self,{:simulate_disconnection})
+        GenServer.cast(self(),{:simulate_disconnection})
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode}}
     end
 
@@ -42,7 +42,7 @@ defmodule Orc do
         time = :rand.uniform(5)*1000
         GenServer.cast(String.to_atom("user"<>Integer.to_string(client)),{:disconnect,time})
         Process.sleep(5000)
-        GenServer.cast(self,{:simulate_disconnection})
+        GenServer.cast(self(),{:simulate_disconnection})
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode}}
     end
 

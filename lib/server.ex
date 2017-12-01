@@ -16,9 +16,15 @@ defmodule Server do
          {:ok, {clientnode}}
     end
 
+    def handle_call({:disconnection,x},_,{clientnode})do
+        :ets.update_element(:tab_user,x,{4, "disconnected"})
+        :ets.insert_new(:tab_msgq,{x,[]})
+        {:reply,"ok",{clientnode}}
+    end
+
     def handle_call({:simulator_add,address},_,{clientnode}) do
          clientnode = address
-         IO.puts "Connected to client simulator sucessfully."
+         IO.puts "Connected to client simulator sucessfully at #{clientnode}."
         {:reply,"ok",{clientnode}}
     end
 
@@ -33,12 +39,6 @@ defmodule Server do
         #IO.inspect recsize
         GenServer.cast({:orc,clientnode},{:registered})
         {:noreply,{clientnode}}
-    end
-
-    def handle_call({:disconnection,x},_,{clientnode})do
-        :ets.update_element(:tab_user,x,{4, "disconnected"})
-        :ets.insert_new(:tab_msgq,{x,[]})
-        {:reply,"ok",{clientnode}}
     end
 
     def handle_cast({:reconnection,x},{clientnode})do
@@ -99,9 +99,8 @@ defmodule Server do
         :global.sync()
         send(:global.whereis_name(:client_boss),{:all_requests_served})
         send(:global.whereis_name(:server_boss),{:all_requests_served})
-        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted}}
+        {:noreply,{clientnode}}
     end
-
 
     def send_if_alive(follower,sender,msg,tweetid,clientnode)do
         status = :ets.lookup_element(:tab_user,follower,4)
