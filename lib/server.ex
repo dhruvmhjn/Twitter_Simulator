@@ -45,7 +45,7 @@ defmodule Server do
         :ets.update_element(:tab_user,x,{4, "connected"})
         [{_,tweetlist}]=:ets.lookup(:tab_msgq,x)
         :ets.delete(:tab_msgq,x)
-        result = Enum.map(tweetlist,fn(x)-> :ets.lookup(:tab_tweets,x)end)
+        result = Enum.map(tweetlist,fn(x)-> :ets.lookup(:tab_tweet,x)end)
         IO.puts "Dump for user#{x} :: #{result}"
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
@@ -83,7 +83,7 @@ defmodule Server do
     def handle_cast({:hashtags,x,hashtag},{clientnode})do
         #list of tweetids for hashtag
         list = List.flatten(:ets.match(:tab_hashtag,{hashtag,:"$1"}))
-        result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweets,x)end)
+        result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweet,x)end)
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
     end
@@ -91,7 +91,7 @@ defmodule Server do
     def handle_cast({:mentions,x,mention},{clientnode})do
         #list of tweetids for mention
         list = List.flatten(:ets.match(:tab_mentions,{mention,:"$1"}))
-        result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweets,x)end)
+        result = Enum.map(list,fn(x)-> :ets.lookup(:tab_tweet,x)end)
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
     end

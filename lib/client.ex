@@ -104,12 +104,12 @@ defmodule Client do
 
     def tweet_hash(x,servernode,tweets_pool,_) do
         #Generate a message
-        msg = Enum.random(tweets_pool) <> "#hashtag" <>Integer.to_string(:rand.uniform(999))
+        msg = Enum.random(tweets_pool) <> " #hashtag" <>Integer.to_string(:rand.uniform(999))
         GenServer.cast({:server,servernode},{:tweet,x,msg})
     end
 
     def tweet_mention(x,servernode,tweets_pool,clients) do
-        msg = Enum.random(tweets_pool) <> "@user"<>Integer.to_string(:rand.uniform(clients))
+        msg = Enum.random(tweets_pool) <> " @user"<>Integer.to_string(:rand.uniform(clients))
         GenServer.cast({:server,servernode},{:tweet,x,msg})
     end
 
