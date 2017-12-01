@@ -62,9 +62,12 @@ defmodule Client do
         end
         {:noreply,{x,acts,servernode,clients,tweets_pool}}  
     end
-    def handle_cast({:deactivate},{x,acts,servernode,clients,tweets_pool})do
+    def handle_cast({:disconnect,time},{x,acts,servernode,clients,tweets_pool})do
         #stop all activities, play dead
         #inform server
+        GenServer.call({:server,servernode},{:disconnection,x})
+        Process.sleep(time)
+        GenServer.cast({:server,servernode},{:reconnection,x})
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
     def handle_cast({:incoming_tweet,source,msg},{x,acts,servernode,clients,tweets_pool})do
