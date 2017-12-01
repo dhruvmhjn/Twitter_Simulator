@@ -22,7 +22,7 @@ defmodule Server do
         {:reply,"ok",{clientnode}}
     end
 
-    def handle_call({:simulator_add,address},_,{_}) do
+    def handle_call({:simulator_add,address},_,{clientnode}) do
          clientnode = address
          IO.puts "Connected to client simulator sucessfully at #{clientnode}."
         {:reply,"ok",{clientnode}}

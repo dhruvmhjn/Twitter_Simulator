@@ -27,6 +27,7 @@ defmodule Orc do
     end
 
     def handle_cast({:begin_activate},{numClients,acts,subPercent,numRegistered,numCompleted,servernode})do
+        IO.puts "ACtivating"
         n_list = Enum.to_list 1..numClients
 
         sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,round(Float.ceil(numClients*subPercent/1000))), fn(_)-> bais(numClients) end) end)
