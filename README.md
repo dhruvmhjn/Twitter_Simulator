@@ -1,4 +1,4 @@
-Impement the full brief.
+Impemented the full brief.
 
 NOTE: The distributed implementation of this program depends on the init.getif() system call. If the first IP address returned is not the address of the machine on the local network, no node can be named correctly.
 Hence nodes can’t connect.
