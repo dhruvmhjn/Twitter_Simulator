@@ -34,10 +34,6 @@ defmodule Server do
         #update table (add a new user x)
         #IO.puts("Registering user #{x}")
         :ets.insert_new(:tab_user, {x, [], [], "connected",0})
-        #res = :ets.lookup(:tab_user, "qwerty")
-        #IO.inspect ress
-        #[_,_,_,_,_,_,_,{:size, recsize},_,_,_,_,_] = :ets.info(:tab_user)
-        #IO.inspect recsize
         GenServer.cast({:orc,clientnode},{:registered})
         {:noreply,{clientnode}}
     end
@@ -47,8 +43,6 @@ defmodule Server do
         [{_,tweetlist}]=:ets.lookup(:tab_msgq,x)
         :ets.delete(:tab_msgq,x)
         result = Enum.map(tweetlist,fn(x)-> :ets.lookup(:tab_tweet,x)end)
-        #IO.puts "Dump for user#{x} ::" 
-        #IO.inspect result
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
     end

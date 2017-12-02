@@ -25,10 +25,13 @@ defmodule Boss do
             ApplicationSupervisor.start_link([String.to_atom("nonames@"<>"noonodess")]) 
         else
             #Client Simulators
-            [numClients,minActs,subPercent,serverip]=argstr
+            [numClients,minActs,serverip]=argstr
             numClientsInt = String.to_integer(numClients)
             minActsInt = String.to_integer(minActs)
-            subPercentInt = String.to_float(subPercent)
+            sub_1 = String.length(numClients)
+            subPercentInt = :math.pow(10,-(sub_1-3))
+            IO.puts subPercentInt
+            #subPercentInt = String.to_float(subPercent)
             snode=String.to_atom("clientnode@"<>ipofsnode)
             Node.start snode
             Node.set_cookie :dmahajan
