@@ -41,7 +41,7 @@ defmodule Orc do
         client = :rand.uniform(numClients)
         time = :rand.uniform(5)*500
         GenServer.cast(String.to_atom("user"<>Integer.to_string(client)),{:disconnect,time})
-        Process.sleep(5000)
+        Process.sleep(3000)
         GenServer.cast(self(),{:simulate_disconnection})
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
     end
