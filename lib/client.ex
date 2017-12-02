@@ -65,6 +65,7 @@ defmodule Client do
             #IO.puts "client #{x} act #{acts}"
             GenServer.cast(self(),{:pick_random,current_state + 1})
         else
+            IO.puts "User #{x} has finised generating it's minimum number of tweets/queries (activities)."
             GenServer.cast(:orc, {:acts_completed})
         end
         {:noreply,{x,acts,servernode,clients,tweets_pool}}  
@@ -92,8 +93,8 @@ defmodule Client do
     end
 
     def handle_cast({:query_result,result},{x,acts,servernode,clients,tweets_pool})do
-        IO.puts "user#{x} received result of query::"
-        IO.inspect result
+        #IO.puts "user#{x} received result of query::"
+        #IO.inspect result
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
 

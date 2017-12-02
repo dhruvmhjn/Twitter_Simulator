@@ -25,13 +25,13 @@ defmodule Server do
     def handle_call({:simulator_add,address},_,{clientnode}) do
          clientnode = address
          IO.puts "Connected to client simulator sucessfully at #{clientnode}."
+         IO.puts "All IO showing the progress of the simulation at the Simulator console."
         {:reply,"ok",{clientnode}}
     end
 
     def handle_cast({:registeruser,x},{clientnode}) do
         #update table (add a new user x)
         IO.puts("Registering user #{x}")
-
         :ets.insert_new(:tab_user, {x, [], [], "connected",0})
         #res = :ets.lookup(:tab_user, "qwerty")
         #IO.inspect ress
@@ -46,8 +46,8 @@ defmodule Server do
         [{_,tweetlist}]=:ets.lookup(:tab_msgq,x)
         :ets.delete(:tab_msgq,x)
         result = Enum.map(tweetlist,fn(x)-> :ets.lookup(:tab_tweet,x)end)
-        IO.puts "Dump for user#{x} ::" 
-        IO.inspect result
+        #IO.puts "Dump for user#{x} ::" 
+        #IO.inspect result
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
     end
@@ -56,7 +56,7 @@ defmodule Server do
         #update table (add subscribe to for user x)
         [{_,old_list,_,_,_}] = :ets.lookup(:tab_user, x)
         subscribe_to = Enum.uniq(subscribe_to) -- [x]
-        IO.puts "user#{x} is now following #{Enum.at(subscribe_to,0)}, #{Enum.at(subscribe_to,1)}"
+        #IO.puts "user#{x} is now following #{Enum.at(subscribe_to,0)}, #{Enum.at(subscribe_to,1)}"
         new_list = Enum.uniq(old_list++subscribe_to)
         :ets.update_element(:tab_user, x, {2, new_list})
         #update table (add x to followers list)
