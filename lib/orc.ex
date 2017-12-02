@@ -50,7 +50,7 @@ defmodule Orc do
         numCompleted= numCompleted + 1
         if(numCompleted == numClients) do
             #Process.sleep(1000)
-            GenServer.cast({:server,servernode},{:acts_completed})
+            GenServer.cast({:server,servernode},{:all_completed})
         end
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
     end

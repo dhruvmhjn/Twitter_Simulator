@@ -98,7 +98,7 @@ defmodule Server do
         {:noreply,{clientnode}}
     end
 
-    def handle_cast({:acts_completed},{clientnode}) do
+    def handle_cast({:all_completed},{clientnode}) do
         IO.puts "Exiting."
         GenServer.cast({:orc,clientnode},{:time})
         :global.sync()
