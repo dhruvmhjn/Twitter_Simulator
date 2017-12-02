@@ -55,7 +55,7 @@ defmodule Orc do
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
     end
 
-    def handle_cast({{:time},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}) do
+    def handle_cast({:time},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
         b = System.system_time(:millisecond)
         time_taken = start_time - b
         send(:global.whereis_name(:client_boss),{:all_requests_served_c,time_taken,numClients,acts,subPercent})
