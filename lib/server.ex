@@ -31,7 +31,7 @@ defmodule Server do
 
     def handle_cast({:registeruser,x},{clientnode}) do
         #update table (add a new user x)
-        IO.puts("Registering user #{x}")
+        #IO.puts("Registering user #{x}")
         :ets.insert_new(:tab_user, {x, [], [], "connected",0})
         #res = :ets.lookup(:tab_user, "qwerty")
         #IO.inspect ress
