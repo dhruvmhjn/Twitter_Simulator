@@ -28,7 +28,7 @@ defmodule Boss do
             [numClients,minActs,subPercent,serverip]=argstr
             numClientsInt = String.to_integer(numClients)
             minActsInt = String.to_integer(minActs)
-            subPercentInt = String.to_integer(subPercent)
+            subPercentInt = String.to_float(subPercent)
             snode=String.to_atom("clientnode@"<>ipofsnode)
             Node.start snode
             Node.set_cookie :dmahajan
