@@ -92,7 +92,7 @@ defmodule Client do
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
 
-    def handle_cast({:query_result,result},{x,acts,servernode,clients,tweets_pool})do
+    def handle_cast({:query_result,_},{x,acts,servernode,clients,tweets_pool})do
         #IO.puts "user#{x} received result of query::"
         #IO.inspect result
         {:noreply,{x,acts,servernode,clients,tweets_pool}}
