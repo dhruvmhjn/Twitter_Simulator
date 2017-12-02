@@ -29,6 +29,7 @@ defmodule Orc do
     def handle_cast({:begin_activate},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,_})do
         IO.puts "Activating clients, and starting time measurement."
         #rangemax = :math.pow(10,String.length(Integer.to_string(numClients)-2))
+        IO.puts subPercent
         n_list = Enum.to_list 1..numClients
         sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,round(Float.ceil(subPercent))), fn(_)-> bais(numClients) end) end)
         Enum.map(n_list, fn(x) -> GenServer.cast(String.to_atom("user"<>Integer.to_string(x)),{:activate, Enum.uniq(Enum.at(sub_list,x-1))}) end)
