@@ -16,17 +16,18 @@ defmodule Server do
          {:ok, {clientnode}}
     end
 
-    def handle_call({:disconnection,x},_,{clientnode})do
-        :ets.update_element(:tab_user,x,{4, "disconnected"})
-        :ets.insert_new(:tab_msgq,{x,[]})
-        {:reply,"ok",{clientnode}}
-    end
-
+  
     def handle_call({:simulator_add,address},_,{_}) do
          clientnode = address
          IO.puts "Connected to client simulator sucessfully at #{clientnode}."
          IO.puts "All IO showing the progress of the simulation at the Simulator console."
         {:reply,"ok",{clientnode}}
+    end
+
+    def handle_cast({:disconnection,x},{clientnode})do
+        :ets.update_element(:tab_user,x,{4, "disconnected"})
+        :ets.insert_new(:tab_msgq,{x,[]})
+        {:noreply,{clientnode}}
     end
 
     def handle_cast({:registeruser,x},{clientnode}) do
