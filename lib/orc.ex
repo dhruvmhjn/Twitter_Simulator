@@ -32,19 +32,19 @@ defmodule Orc do
         sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,round(Float.ceil(numClients*subPercent/1000))), fn(_)-> bais(numClients) end) end)
         Enum.map(n_list, fn(x) -> GenServer.cast(String.to_atom("user"<>Integer.to_string(x)),{:activate, Enum.uniq(Enum.at(sub_list,x-1))}) end)
         start_time = System.system_time(:millisecond)
-        GenServer.cast(self(),{:simulate_disconnection})
+        #GenServer.cast(self(),{:simulate_disconnection})
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time,}}
     end
 
 
-    def handle_cast({:simulate_disconnection},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
-        client = :rand.uniform(numClients)
-        time = :rand.uniform(5)*500
-        GenServer.cast(String.to_atom("user"<>Integer.to_string(client)),{:disconnect,time})
-        Process.sleep(3000)
-        GenServer.cast(self(),{:simulate_disconnection})
-        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
-    end
+    # def handle_cast({:simulate_disconnection},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
+    #     client = :rand.uniform(numClients)
+    #     time = :rand.uniform(5)*500
+    #     GenServer.cast(String.to_atom("user"<>Integer.to_string(client)),{:disconnect,time})
+    #     Process.sleep(3000)
+    #     GenServer.cast(self(),{:simulate_disconnection})
+    #     {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
+    # end
 
     def handle_cast({:acts_completed},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
         numCompleted= numCompleted + 1

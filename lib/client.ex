@@ -56,6 +56,9 @@ defmodule Client do
                 4 ->
                     query_self_mentions(x,servernode)
 
+                5 ->
+                    discon(x,servernode)
+
                 _ ->
                     tweet(x,servernode,tweets_pool)
                     #querytweets(x)
@@ -70,14 +73,14 @@ defmodule Client do
         end
         {:noreply,{x,acts,servernode,clients,tweets_pool}}  
     end
-    def handle_cast({:disconnect,time},{x,acts,servernode,clients,tweets_pool})do
-        #stop all activities, play dead
-        #inform server
-        GenServer.cast({:server,servernode},{:disconnection,x})
-        Process.sleep(time)
-        GenServer.cast({:server,servernode},{:reconnection,x})
-        {:noreply,{x,acts,servernode,clients,tweets_pool}}
-    end
+    # def handle_cast({:disconnect,time},{x,acts,servernode,clients,tweets_pool})do
+    #     #stop all activities, play dead
+    #     #inform server
+    #     GenServer.cast({:server,servernode},{:disconnection,x})
+    #     Process.sleep(time)
+    #     GenServer.cast({:server,servernode},{:reconnection,x})
+    #     {:noreply,{x,acts,servernode,clients,tweets_pool}}
+    # end
     def handle_cast({:incoming_tweet,source,msg},{x,acts,servernode,clients,tweets_pool})do
         #IO.puts "user#{x} received a tweet from user#{source}:: #{msg}"
         if (:rand.uniform(999) == 99) do
@@ -130,6 +133,16 @@ defmodule Client do
     def query_self_mentions(x,servernode) do
         mention = "@user"<>Integer.to_string(x)
         GenServer.cast({:server,servernode},{:mentions,x,mention})
+    end
+
+    def discon(x,servernode)do
+        #stop all activities, play dead
+        #inform server
+        time = :rand.uniform(5)*500
+        GenServer.cast({:server,servernode},{:disconnection,x})
+        Process.sleep(time)
+        GenServer.cast({:server,servernode},{:reconnection,x})
+        {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
     
 end
