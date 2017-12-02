@@ -28,9 +28,19 @@ defmodule Boss do
             [numClients,minActs,serverip]=argstr
             numClientsInt = String.to_integer(numClients)
             minActsInt = String.to_integer(minActs)
-            sub_1 = String.length(numClients)
-            subPercentInt = :math.pow(10,-(sub_1-3))
-            IO.puts subPercentInt
+            subPercentInt= cond do
+                numClients >= 10000 ->
+                    100
+                numClients >= 100 ->
+                    10
+                true ->
+                    1 
+            end
+            #sub_1 = String.length(numClients)
+            #subPercentInt = :math.pow(10,-(sub_1-3))
+            #rangemax = :math.pow(10,String.length(Integer.to_string(numClientsInt))-1)
+            #IO.puts subPercentInt
+            #IO.puts rangemax
             #subPercentInt = String.to_float(subPercent)
             snode=String.to_atom("clientnode@"<>ipofsnode)
             Node.start snode
