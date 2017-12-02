@@ -50,7 +50,7 @@ defmodule Client do
                 2 -> 
                     tweet_mention(x,servernode,tweets_pool,clients)
 
-                 3 ->
+                3 ->
                     queryhashtags(x,servernode)
 
                 4 ->
@@ -138,7 +138,7 @@ defmodule Client do
     def discon(x,servernode)do
         #stop all activities, play dead
         #inform server
-        time = :rand.uniform(5)*1000
+        time = :rand.uniform(5)*10
         GenServer.cast({:server,servernode},{:disconnection,x})
         Process.sleep(time)
         GenServer.cast({:server,servernode},{:reconnection,x})
