@@ -36,7 +36,7 @@ defmodule Boss do
                 true ->
                     1 
             end
-            IO.puts subPercentInt
+            #IO.puts subPercentInt
             snode=String.to_atom("clientnode@"<>ipofsnode)
             Node.start snode
             Node.set_cookie :dmahajan
