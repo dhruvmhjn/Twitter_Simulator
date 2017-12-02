@@ -49,7 +49,7 @@ defmodule Orc do
     def handle_cast({:acts_completed},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
         numCompleted= numCompleted + 1
         if(numCompleted == numClients) do
-            Process.sleep(1000)
+            #Process.sleep(1000)
             GenServer.cast({:server,servernode},{:acts_completed})
         end
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
