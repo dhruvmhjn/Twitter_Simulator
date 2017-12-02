@@ -142,7 +142,6 @@ defmodule Client do
         GenServer.cast({:server,servernode},{:disconnection,x})
         Process.sleep(time)
         GenServer.cast({:server,servernode},{:reconnection,x})
-        {:noreply,{x,acts,servernode,clients,tweets_pool}}
     end
     
 end
