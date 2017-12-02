@@ -6,56 +6,61 @@ defmodule Orc do
         return
     end
     def init({numClients,acts,subPercent,servernode}) do
-        {:ok,{numClients,acts,subPercent,0,0,servernode}}
+        {:ok,{numClients,acts,subPercent,0,0,servernode,0}}
     end
-    def handle_cast({:spawn_complete},{numClients,acts,subPercent,numRegistered,numCompleted,servernode}) do
+    def handle_cast({:spawn_complete},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
     
         n_list = Enum.to_list 1..numClients
 
         nodeid_list = Enum.map(n_list, fn(x) -> "user"<>Integer.to_string(x) end)
         Enum.map(nodeid_list, fn(x) -> GenServer.cast(String.to_atom(x),{:register}) end)
-        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode}}
+        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
      end
 
-    def handle_cast({:registered},{numClients,acts,subPercent,numRegistered,numCompleted,servernode})do
+    def handle_cast({:registered},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time})do
         numRegistered = numRegistered+1
         if numRegistered == numClients do
-            IO.puts "Finished registration"
+            IO.puts "Finished registration."
             GenServer.cast(:orc,{:begin_activate})
         end
-        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode}}
+        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
     end
 
-    def handle_cast({:begin_activate},{numClients,acts,subPercent,numRegistered,numCompleted,servernode})do
-        IO.puts "ACtivating"
+    def handle_cast({:begin_activate},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,_})do
+        IO.puts "Activating clients, and starting time measurement."
         n_list = Enum.to_list 1..numClients
-
         sub_list = Enum.map(1..numClients, fn(_)-> Enum.map(Range.new(1,round(Float.ceil(numClients*subPercent/1000))), fn(_)-> bais(numClients) end) end)
-        
         Enum.map(n_list, fn(x) -> GenServer.cast(String.to_atom("user"<>Integer.to_string(x)),{:activate, Enum.uniq(Enum.at(sub_list,x-1))}) end)
+        start_time = System.system_time(:millisecond)
         GenServer.cast(self(),{:simulate_disconnection})
-        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode}}
+        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time,}}
     end
 
 
-    def handle_cast({:simulate_disconnection},{numClients,acts,subPercent,numRegistered,numCompleted,servernode}) do
+    def handle_cast({:simulate_disconnection},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
         client = :rand.uniform(numClients)
         time = :rand.uniform(5)*1000
         GenServer.cast(String.to_atom("user"<>Integer.to_string(client)),{:disconnect,time})
         Process.sleep(5000)
         GenServer.cast(self(),{:simulate_disconnection})
-        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode}}
+        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
     end
 
-    def handle_cast({:acts_completed},{numClients,acts,subPercent,numRegistered,numCompleted,servernode}) do
+    def handle_cast({:acts_completed},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}) do
         numCompleted= numCompleted + 1
         if(numCompleted == numClients) do
             Process.sleep(1000)
             GenServer.cast({:server,servernode},{:acts_completed})
         end
-        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode}}
+        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
     end
 
+    def handle_cast({{:time},{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}) do
+        b = System.system_time(:millisecond)
+        time_taken = start_time - b
+        send(:global.whereis_name(:client_boss),{:all_requests_served_c,time_taken,numClients,acts,subPercent})
+        {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}
+    end
 
     def bais(numClients) do
         case rem(:rand.uniform(99999),7) do

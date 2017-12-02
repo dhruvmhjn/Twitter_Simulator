@@ -47,7 +47,7 @@ defmodule Server do
         :ets.delete(:tab_msgq,x)
         result = Enum.map(tweetlist,fn(x)-> :ets.lookup(:tab_tweet,x)end)
         IO.puts "Dump for user#{x} ::" 
-        IO.inspect "#{result}"
+        IO.inspect result
         GenServer.cast({String.to_atom("user"<>Integer.to_string(x)),clientnode},{:query_result, result})
         {:noreply,{clientnode}}
     end
@@ -98,9 +98,10 @@ defmodule Server do
     end
 
     def handle_cast({:acts_completed},{clientnode}) do
+        GenServer.cast({:orc,clientnode},{:time})
         :global.sync()
-        send(:global.whereis_name(:client_boss),{:all_requests_served})
-        send(:global.whereis_name(:server_boss),{:all_requests_served})
+        #send(:global.whereis_name(:client_boss),{:all_requests_served})
+        send(:global.whereis_name(:server_boss),{:all_requests_served_S})
         {:noreply,{clientnode}}
     end
 
