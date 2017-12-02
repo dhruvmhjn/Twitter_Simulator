@@ -15,7 +15,7 @@ defmodule Client do
         #ZIPF: Randomly start tweeting/retweeting/subscribe/querying activities acc to zipf rank
         acts = cond do
              x <= (clients*0.01) ->
-                 acts * 100
+                 acts * 20
                  
              x <= (clients*0.1) ->
                  acts * 10
