@@ -29,9 +29,9 @@ defmodule Boss do
             numClientsInt = String.to_integer(numClients)
             minActsInt = String.to_integer(minActs)
             subPercentInt= cond do
-                numClients >= 10000 ->
+                numClientsInt >= 10000 ->
                     100
-                numClients >= 100 ->
+                numClientsInt >= 100 ->
                     10
                 true ->
                     1 
