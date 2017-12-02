@@ -50,6 +50,7 @@ defmodule Orc do
         numCompleted= numCompleted + 1
         if(numCompleted == numClients) do
             #Process.sleep(1000)
+            IO.puts ("Request generation completed, messages getting delivered. Pls wait.")
             GenServer.cast({:server,servernode},{:all_completed})
         end
         {:noreply,{numClients,acts,subPercent,numRegistered,numCompleted,servernode,start_time}}

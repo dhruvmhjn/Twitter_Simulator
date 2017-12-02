@@ -64,11 +64,11 @@ defmodule Boss do
                 IO.puts "   Next 9% of the clients do at least 10 times the minumum activities."
                 IO.puts "   Next 50% of the clients do at least 2 times the minumum activities."
                 IO.puts "   Rest 40% of the clients do at least the minumum activities."
-                IO.puts "Total, approx = #{acts*100} * #{clients*0.01} + #{acts*10} * #{clients*0.09} + #{acts*2} * #{clients*0.5} + #{acts} * #{clients*0.4}"
+                IO.puts "Total activities, approx = #{acts*100} * #{clients*0.01} + #{acts*10} * #{clients*0.09} + #{acts*2} * #{clients*0.5} + #{acts} * #{clients*0.4}"
                 tot = (acts*100 * clients*0.01) + (acts* 10 * clients*0.09) + (acts*2 * clients*0.5) + (acts * clients*0.4)
                 IO.puts "Approx total: #{round(tot)}"
                 #time_taken = time_taken/1000
-                IO.puts "Approx. Requests per second: #{tot/time_taken}"
+                IO.puts "Approx. activities per second: #{tot/time_taken}"
                 :init.stop                 
          end
         boss_receiver()
