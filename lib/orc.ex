@@ -68,17 +68,17 @@ defmodule Orc do
     def bais(numClients) do
         case rem(:rand.uniform(99999),7) do
             1 ->
-                :rand.uniform(round(numClients*0.1))
+                :rand.uniform(round(Float.ceil(numClients*0.1)))
             2 ->
-                :rand.uniform(round(numClients*0.1))
+                :rand.uniform(round(Float.ceil(numClients*0.1)))
             3 ->
-                :rand.uniform(round(numClients*0.6))
+                :rand.uniform(round(Float.ceil(numClients*0.6)))
             4 ->
                 :rand.uniform(numClients)
             5 ->
                 :rand.uniform(numClients)
             _ ->
-                :rand.uniform(round(numClients*0.01))
+                :rand.uniform(round(Float.ceil(numClients*0.01)))
         end
     end
     
