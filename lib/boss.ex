@@ -12,8 +12,8 @@ defmodule Boss do
 
         #ipregex = ~r/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
         {:ok,[{ip,_,_}|tail]}=:inet.getif()
-        [{ip2,_,_}|_]=tail
-        ipofsnode =to_string(:inet.ntoa(ip2))
+        #[{ip2,_,_}|_]=tail
+        ipofsnode =to_string(:inet.ntoa(ip))
 
         if Regex.match?(sregex,Enum.at(argstr,0)) do
             #Server Twitter Engine
