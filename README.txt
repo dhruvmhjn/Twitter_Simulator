@@ -1,4 +1,4 @@
-Impemented the full brief.
+﻿Impemented the full brief.
 
 NOTE: The distributed implementation of this program depends on the init.getif() system call. If the first IP address returned is not the address of the machine on the local network, no node can be named correctly.
 Hence nodes can’t connect.
@@ -10,7 +10,7 @@ Group Members:
 
 How to run the project:
 
-The Client simulator and server are two different processes. These can be on the same or different machines on the same local network but they must get the correct IP address from the init.getif() system call.
+The Client simulator and server are two different processes. These can be on the same or different machines (two terminals) on the same local network but they must get the correct IP address from the init.getif() system call.
 
 Step 1) 
 To run Server
@@ -21,6 +21,8 @@ To run client simumator
 ./project4 <numclients> <minimumActivities> <IP Address of the Server>
 
 example:  ./proejct4 1000 100 192.168.0.17
+
+If running on the same machine, pls still provied the IP address of the server node.
 
 Minimum activities: acts
     Top 1% of the clients do at least 20 times the minumum activities.
